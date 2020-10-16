@@ -27,7 +27,7 @@ app.get("/", (req, res) => {
 app.get("/barks", (req, res, next) => {
   let {skip = 0, limit = 5} = req.query;
   skip = parseInt(skip) || 0;
-  limit = parseInt(limit) || 5;
+  limit = parseInt(limit) || 10;
 
   skip = skip < 0 ? 0 : skip;
   limit = Math.min(50, Math.max(1,limit));

@@ -5,7 +5,7 @@ const API_URL = 'http://localhost:5000/barks';
 
 class App extends Component<any, any> {
     skip = 0;
-    limit = 5;
+    limit = 10;
     loading = false;
     finished = false;
 
@@ -26,22 +26,11 @@ class App extends Component<any, any> {
     }
 
     componentDidMount() {
-        const barkList = document.querySelector(".barks");
-        document.addEventListener("scroll", () => {
-            const rect = barkList!.getBoundingClientRect();
-            if(rect.top < window.innerHeight && !this.loading && !this.finished){
-                this.loadMore();
-            }
-        })
         this.getBarks();
         if(!this.state.intervalIsSet){
             let interval = setInterval(this.getBarks, 2000);
             this.setState({intervalIsSet:interval});
         }
-    }
-    loadMore() {
-        this.skip+= this.limit;
-        this.getBarks(false);
     }
     getBarks(reset = true){
         this.loading = true;
@@ -114,7 +103,7 @@ class App extends Component<any, any> {
         }
     }
     render() {
-        let barks = this.state.barks.slice(1).map((bark: any) => {
+        let barks = this.state.barks.map((bark: any) => {
             return (
                 <div>
                     <h3>{bark.name}</h3>
