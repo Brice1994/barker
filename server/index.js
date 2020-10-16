@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/barks", (req, res, next) => {
-  let {skip = 0, limit = 5, sort = "desc"} = req.query;
+  let {skip = 0, limit = 5} = req.query;
   skip = parseInt(skip) || 0;
   limit = parseInt(limit) || 5;
 
@@ -38,7 +38,7 @@ app.get("/barks", (req, res, next) => {
         skip,
         limit,
         sort: {
-          created: sort === "desc" ? -1 : 1
+          created: -1
         }
       })
   ]).then(([total, barks]) => {
@@ -57,10 +57,6 @@ function isValidBark(bark){
   return bark.name && bark.name.toString().trim().length > 0 && bark.name.toString().trim().length <= 50 &&
       bark.content && bark.content.toString().trim().length > 0 && bark.content.toString().trim().length <= 100;
 }
-app.use(rateLimit({
-  windowMs: 30 * 1000,
-  max: 1
-}));
 
 function createBark(req, res, next) {
   if(isValidBark(req.body)){

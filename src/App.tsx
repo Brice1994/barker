@@ -11,9 +11,6 @@ class App extends Component<any, any> {
 
     state: {[key:string]: any} = {
         barks: [""],
-        formStyle: {
-            display: ""
-        },
         errorStyle: {
             display:"none"
         },
@@ -22,15 +19,25 @@ class App extends Component<any, any> {
             display: "none"
         }
     }
+
+    constructor(props: any) {
+        super(props);
+        this.getBarks = this.getBarks.bind(this);
+    }
+
     componentDidMount() {
-        const loadingElement = document.querySelector("#loadMore");
+        const barkList = document.querySelector(".barks");
         document.addEventListener("scroll", () => {
-            const rect = loadingElement!.getBoundingClientRect();
+            const rect = barkList!.getBoundingClientRect();
             if(rect.top < window.innerHeight && !this.loading && !this.finished){
-                this.getBarks();
+                this.loadMore();
             }
         })
-        this.getBarks()
+        this.getBarks();
+        if(!this.state.intervalIsSet){
+            let interval = setInterval(this.getBarks, 2000);
+            this.setState({intervalIsSet:interval});
+        }
     }
     loadMore() {
         this.skip+= this.limit;
@@ -45,9 +52,6 @@ class App extends Component<any, any> {
         fetch(`${API_URL}?skip=${this.skip}&limit=${this.limit}`)
             .then(res => res.json())
             .then(result => {
-                let curr = this.state.barks;
-                console.log(curr);
-                curr.push(...result.barks);
                 let visible;
                 if(!result.meta.has_more) {
                     visible = "hidden";
@@ -57,7 +61,7 @@ class App extends Component<any, any> {
                 }
                 this.loading = false;
                 this.setState({
-                    barks: curr,
+                    barks: result.barks,
                     loadingStyle: {visibility: visible}
                 })
             });
@@ -71,7 +75,6 @@ class App extends Component<any, any> {
         if(name?.toString().trim() && content?.toString().trim()){
             this.setState({
                 errorStyle: { display: "none"},
-                formStyle: {display: "none"},
                 loadingStyle: {display: ""}
             });
             const bark = {
@@ -96,15 +99,8 @@ class App extends Component<any, any> {
             }).then(() => {
                 const form = document.getElementById("bark-form") as HTMLFormElement
                 form!.reset();
-                setTimeout(() => {
-                    this.setState({
-                        formStyle: {display:""}
-                    });
-                }, 30000);
-                this.getBarks();
             }).catch(errorMessage => {
                 this.setState({
-                    formStyle: {display:""},
                     errorStyle: {display:"none"},
                     loadingStyle: {display:"none"},
                     errorMessage: errorMessage
@@ -130,7 +126,7 @@ class App extends Component<any, any> {
         return (
             <div className="App">
                 <main>
-                    <form style={this.state.formStyle} id="bark-form" className="bark-form" onSubmit={(event) => this.handleSubmit(event)}>
+                    <form id="bark-form" className="bark-form" onSubmit={(event) => this.handleSubmit(event)}>
                         <div style={this.state.errorStyle} className="error-message">{this.state.errorMessage}</div>
                         <label htmlFor="name">Name</label>
                         <input className="u-full-width" type="text" id="name" name="name"/>
@@ -138,9 +134,7 @@ class App extends Component<any, any> {
                         <input className="u-full-width" type="text" id="content" name="content"/>
                         <button className="button-primary">Send your Bark!</button>
                     </form>
-                    <div className="button-container">
-                        <p style={this.state.loadingStyle} id="loadMore">Loading...</p>
-                    </div>
+                    <div className="button-container"/>
                     <div className="barks">{barks}</div>
                     <div className="loading">
                         <img src="images/loading.gif" alt=""/>
