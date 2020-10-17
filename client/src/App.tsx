@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-const API_URL = "/barks";
+const API_URL = "/api/barks";
 class App extends Component<any, any> {
   skip = 0;
   limit = 10;
@@ -25,7 +25,7 @@ class App extends Component<any, any> {
   componentDidMount() {
     this.getBarks();
     if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getBarks, 2000);
+      let interval = setInterval(this.getBarks, 4000);
       this.setState({ intervalIsSet: interval });
     }
   }
@@ -112,9 +112,9 @@ class App extends Component<any, any> {
       );
     });
     return (
-      <div style={{ margin: "auto", width: "50%" }} className="App">
+      <div className="App">
         <header>
-          <h1>Barker - Twitter for Dogs! 🐶 </h1>
+          <h1 className= "title">Barker - Twitter for Dogs! 🐶 </h1>
         </header>
         <main>
           <form

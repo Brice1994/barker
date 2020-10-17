@@ -1,9 +1,10 @@
+@import "./styles/skeleton.css";
 .App {
-  margin: auto;
-  width: 50%;
+  background-color: #1E1E1E;
 }
 .title {
   text-align: center;
+  color: #919191;
 }
 
 .error-message {
@@ -13,9 +14,11 @@
   padding: 10px;
 }
 
-.bark-form, .loading {
+.bark-form,
+.loading {
   width: 50%;
   margin: 0 auto;
+  color: white;
 }
 
 .loading {
@@ -25,6 +28,8 @@
 .barks {
   width: 80%;
   margin: 0 auto;
+  border-radius: 5px;
+  border-color: gray;
 }
 
 .barks > div {
