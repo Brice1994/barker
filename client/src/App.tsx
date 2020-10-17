@@ -111,6 +111,7 @@ class App extends Component<any, any> {
         })
         return (
             <div className="App">
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"></link>
                 <main>
                     <form id="bark-form" className="bark-form" onSubmit={(event) => this.handleSubmit(event)}>
                         <div style={this.state.errorStyle} className="error-message">{this.state.errorMessage}</div>
