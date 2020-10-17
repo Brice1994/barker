@@ -1,3 +1,7 @@
+.App {
+  margin: auto;
+  width: 50%;
+}
 .title {
   text-align: center;
 }
