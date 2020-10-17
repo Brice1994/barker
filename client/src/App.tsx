@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-const API_URL = "http://localhost:5000/barks";
+const API_URL = "/barks";
 class App extends Component<any, any> {
     skip = 0;
     limit = 10;
