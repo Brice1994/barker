@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "set USER=user&& set AUTHKEY=E3jMs33OymDkdoIG&& nodemon index.js",
+    "dev": "nodemon index.js",
     "start": "node index.js",
     "heroku-postbuild" : "cd client && npm install && npm run build"
   },
