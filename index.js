@@ -5,6 +5,7 @@ const Filter = require("bad-words");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const app = express();
+const path = require("path");
 
 const route = `mongodb://${process.env.USER}:${process.env.AUTHKEY}@sezzle-web-calculator-shard-00-00.urh1h.mongodb.net:27017,sezzle-web-calculator-shard-00-01.urh1h.mongodb.net:27017,sezzle-web-calculator-shard-00-02.urh1h.mongodb.net:27017/barks?ssl=true&replicaSet=atlas-qic6uj-shard-0&authSource=admin&retryWrites=true&w=majority`
 const db = monk(route || "localhost/barker");
@@ -18,11 +19,6 @@ app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.json({
-    content: "Barker!"
-  });
-});
 
 app.get("/barks", (req, res, next) => {
   let {skip = 0, limit = 5} = req.query;
@@ -77,11 +73,17 @@ function createBark(req, res, next) {
 }
 app.post("/barks", createBark);
 
-app.use((req, res) => {
-  res.status(500);
-  res.json({
-    content: []
-  })
+// app.use((req, res) => {
+//   res.status(500);
+//   res.json({
+//     content: []
+//   })
+// })
+
+
+app.use("/", express.static(`${__dirname}/client/build`))
+app.get("/", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 })
 
 app.listen(PORT, () => {
